@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import serializeForm from 'form-serialize'
-import {editComment} from '../actions'
+import {updatePost} from '../actions'
 import { connect} from 'react-redux'
 
 class Edit extends Component {
@@ -11,20 +11,22 @@ class Edit extends Component {
 		const values = serializeForm(e.target, {hash:true})
 		values.id= id;
 		//dispatch
-		this.props.dispatch(editComment(values, ()=> {history.push(`/`)}));
+		this.props.dispatch(updatePost(values, ()=> {history.push(`/`)}));
 	}
 
 	render() {
+		console.log(this.props)
 	return (
 	  	<div>
 	  	  <Link to='/'>Close</Link>
 	  	  <div>
-	  	  	{ this.props.comment &&
+	  	  	{ this.props.post &&
 	  	  	<form  onSubmit={this.handleSubmit}>
 	  	  	  <div>
-	  	  	    <input type='text' name='title' defaultValue={this.props.comment.title}/>
-	  	  	    <input type='text' name='body' defaultValue={this.props.comment.body}/>
-	  	  	    <button>Update Comment</button>
+	  	  	    <input type='text' name='title' defaultValue={this.props.post.title}/>
+	  	  	    <input type='text' name='body' defaultValue={this.props.post.body}/>
+	  	  	    <input type='text' name='body' defaultValue={this.props.post.body}/>
+	  	  	    <button>Update Post</button>
 	  	  	  </div>
 	  	  	</form>}
 	  	  </div>
@@ -34,9 +36,11 @@ class Edit extends Component {
 }
 
 function mapStateToProps (state, ownProps){
+	console.log(ownProps);
+	console.log(state)
 	return {
 		...ownProps,
-		comment: state.comments.comments[ownProps.id]
+		post: state.posts.posts[ownProps.id]
 	}
 }
 export default connect(mapStateToProps)(Edit);

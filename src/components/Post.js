@@ -27,6 +27,10 @@ class Post extends Component {
 
 	render() {
 		const { post, comments } = this.props
+
+		if ( !post || post.deleted) {
+		  return <p>404 Error</p>
+		}
 	  return (
 	  	<div>
 	    {post && 
@@ -72,16 +76,6 @@ class Post extends Component {
 			    <button>Add Comment</button>
 			  </div>
 			</form>}
-		</div>
-		<div>
-			{
-				post ||
-				<h1>404 ERROR</h1>
-			}
-			{
-				post && post.deleted &&
-				<h1>404 ERROR</h1>
-			}
 		</div>
 	    </div>
 
