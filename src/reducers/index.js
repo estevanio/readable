@@ -30,6 +30,17 @@ function posts (state={isLoading: false, posts: {}}, action) {
 					[action.post.id]:action.post
 				}
 			}
+		case 'UPDATE_COUNT':
+		return {
+				...state,
+				posts : {
+					...state.posts,
+					[action.id]:{
+						...state.posts[action.id],
+						commentCount: state.posts[action.id].commentCount + action.adjuster
+					}
+				}
+			}
 		default: 
 			return state
 	}
@@ -48,6 +59,7 @@ function categories (state={categories: []}, action) {
 			return state
 	}
 }
+
 function comments (state={parent:null, comments:[]}, action) {
 	switch (action.type) {
 		case RECEIVE_COMMENTS:

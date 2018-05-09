@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect} from 'react-redux'
-import {fetchComments, fetchPosts, voteComment, deleteComment, addComment} from '../actions'
+import {fetchComments, fetchPosts, voteComment, deleteComment, addComment, votePost, deletePost} from '../actions'
 import serializeForm from 'form-serialize'
 
 class Post extends Component {
@@ -9,12 +9,16 @@ class Post extends Component {
 	componentDidMount(){
 	  this.props.dispatch(fetchComments(this.props.postid));
 	}
-	vote = (c,v) =>{
+	voteComment = (c,v) =>{
 		this.props.dispatch(voteComment(c,v));
 	}
 	deleteComment = c =>{
 		this.props.dispatch(deleteComment(c))
 	}
+
+	vote = (vote) => {this.props.dispatch(votePost(this.props.post, vote))}
+
+	delete = ()=>{this.props.dispatch(deletePost(this.props.post))}
 
 	handleSubmit = (e) => {
 		e.preventDefault()
@@ -41,9 +45,12 @@ class Post extends Component {
 			<p>Author: {post.author}</p>
 			<p>Comment Count: {post.commentCount}</p>
 			<p>Current Score: {post.voteScore}</p>
+			<button onClick={()=>{this.vote('upVote')}}> UpVote </button>
+			<button onClick={()=>{this.vote('downVote')}}> DownVote </button><br/>
 			<Link to={`/${post.category}/${post.id}/edit`}>
 	            Edit
 	  		</Link>
+	  		<button onClick={()=>{this.delete()}}> Delete Post </button><br/>
 	    	</div> 
 	    }
 		<hr/>
@@ -54,8 +61,8 @@ class Post extends Component {
 				{comments.map((i) => (
 					i.deleted ||
 					<li key={i.id}>
-					<button onClick={()=>{this.vote(i, 'upVote')}}> UpVote </button>
-					<button onClick={()=>{this.vote(i, 'downVote')}}> DownVote </button><br/>
+					<button onClick={()=>{this.voteComment(i, 'upVote')}}> UpVote </button>
+					<button onClick={()=>{this.voteCcomment(i, 'downVote')}}> DownVote </button><br/>
 					<b>Body</b>{i.body} <b> Author </b>{i.author} <br/>
 					 <b> Score</b>{i.voteScore} <br/>
 			  		<Link to={`/${post.category}/${post.id}/${i.id}/edit`}><button>Edit</button></Link>

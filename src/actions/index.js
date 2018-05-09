@@ -24,7 +24,6 @@ export const fetchPosts = ()=> (dispatch) => {
 	API.posts().then((res)=>dispatch(receivePosts(res)))
 }
 export const postUpdated = (post)=>{
-	console.log(post);
 	return {
 		type: POST_UPDATE,
 		post: post
@@ -50,6 +49,14 @@ export const votePost = (post, vote) => (dispatch) => {
 export const fetchCategories = ()=> (dispatch) => {
 	API.categories().then((res)=>dispatch(receiveCategories(res)))
 }
+export const updateCount = (id, adj) => {
+	return {
+		type: 'UPDATE_COUNT',
+		id: id,
+		adjuster: adj
+	}
+}
+
 export const receiveCategories = (cats)=> {
 	return {
 		type : RECEIVE_CATEGORIES,
@@ -89,7 +96,7 @@ export const voteComment = (comment, vote) => (dispatch) => {
 }
 
 export const addComment = (comment) => (dispatch) => {
-	API.addComment(comment).then((res)=>{dispatch(commentAdded(res))})
+	API.addComment(comment).then((res)=>{dispatch(commentAdded(res)); dispatch(updateCount(res.parentId, 1));})
 }
 
 export const commentAdded = (comment) =>{
@@ -100,6 +107,6 @@ export const commentAdded = (comment) =>{
 }
 
 export const deleteComment = (comment) => (dispatch) => {
-	API.deleteComment(comment).then((res)=>{dispatch(updateComment(res))})
+	API.deleteComment(comment).then((res)=>{dispatch(updateComment(res)); dispatch(updateCount(res.parentId, -1)); })
 }
 
